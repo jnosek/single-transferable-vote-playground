@@ -1,0 +1,3 @@
+interface VoteTabulator {
+    tabulateVotes(): void;
+}

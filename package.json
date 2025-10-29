@@ -1,0 +1,12 @@
+{
+  "name": "typescript-browser-app",
+  "version": "1.0.0",
+  "description": "A simple HTML browser page app using TypeScript.",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "typescript": "^5.0.0"
+  }
+}
