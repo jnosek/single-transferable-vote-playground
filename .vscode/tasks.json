@@ -5,7 +5,7 @@
 			"label": "Compile Typescript",
 			"type": "shell",
 			"command": "npm run build",
-			"isBackground": true,
+			"isBackground": false,
 			"problemMatcher": ["$tsc"],
 			"group": "build"
 		},

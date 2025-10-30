@@ -1,6 +1,10 @@
 // Entry point for your TypeScript app
+import output from "./components/htmlLogger.js";
 
-const app = document.getElementById('app');
-if (app) {
-  app.innerText = 'Hello, TypeScript!';
+document.addEventListener('DOMContentLoaded', loaded);
+
+function loaded(): void {
+  output.initialize('console-output');
+
+  output.log('Application has started.');
 }
