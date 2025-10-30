@@ -97,6 +97,11 @@ class RaceViewModel {
         this._race = this.loadFromStorage();
     }
 
+    public save(): void {
+        const json = Race.toJson(this._race);
+        localStorage.setItem('race', json);
+    }
+
     private loadFromStorage(): Race {
         const json = localStorage.getItem('race');
         if (json) {

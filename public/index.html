@@ -41,12 +41,6 @@
                   <input type="number" class="form-control" id="race-seats" name="race-seats" min="1" value="1">
                 </div>
               </div>
-              <div class="mb-3 row align-items-center">
-                <label for="race-voterCount" class="col-sm-5 col-form-label">Number of Voters</label>
-                <div class="col-sm-7">
-                  <input type="number" class="form-control" id="race-voterCount" name="race-voterCount" min="1" value="100">
-                </div>
-              </div>
             </div>
           </div>
           <h3>Candidates</h3>
@@ -89,8 +83,9 @@
           </div>
         </form>
       </div>
+
+      <!-- PLURALITY TAB -->
       <div class="tab-pane fade" id="plurality" role="tabpanel" aria-labelledby="plurality-tab">
-        <!-- Plurality tab content goes here -->
          <div class="container">
           <div class="row">
             <div class="col-4">
@@ -105,12 +100,12 @@
             <div class="col-2">
               <h3>Simulator</h3>
               <div class="mb-3">
-                <button type="button" class="btn btn-success mb-3" id="run-plurality-simulation"><i class="bi bi-play"></i> Run</button>
+                <button type="button" class="btn btn-success mb-3" id="plurality-run"><i class="bi bi-play"></i> Run</button>
               </div>
             </div>
             <div class="col-6">
               <h3>Output</h3>
-              <div id="console-output" class="border rounded p-3">
+              <div id="plurality-output" class="html-logger border rounded p-3">
               </div>
             </div>
           </div>

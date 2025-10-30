@@ -1,39 +1,39 @@
 class HTMLLogger {
-    private static consoleOutput: HTMLElement | null = null;
+    private consoleOutput: HTMLElement | null = null;
 
-    static initialize(elementId: string): void {
+    constructor(elementId: string) {
         this.consoleOutput = document.getElementById(elementId);
     }
- 
-    static log(message: string): void {
+
+    public log(message: string): void {
         this.logWithClass(message, "text-body");
     }
 
-    static primary(message: string): void {
+    public primary(message: string): void {
         this.logWithClass(message, "text-primary");
     }
 
-    static secondary(message: string): void {
+    public secondary(message: string): void {
         this.logWithClass(message, "text-secondary");
     }
 
-    static success(message: string): void {
+    public success(message: string): void {
         this.logWithClass(message, "text-success");
     }
 
-    static danger(message: string): void {
+    public danger(message: string): void {
         this.logWithClass(message, "text-danger");
     }
 
-    static warning(message: string): void {
+    public warning(message: string): void {
         this.logWithClass(message, "text-warning");
     }
 
-    static info(message: string): void {
+    public info(message: string): void {
         this.logWithClass(message, "text-info");
     }
 
-    static blank(): void {
+    public blank(): void {
         if (this.consoleOutput) {
             const blankEntry = document.createElement("pre");
             blankEntry.textContent = " ";
@@ -41,7 +41,13 @@ class HTMLLogger {
         }
     }
 
-    private static logWithClass(message: string, className: string): void {
+    public clear(): void {
+        if (this.consoleOutput) {
+            this.consoleOutput.innerHTML = "";
+        }
+    }
+
+    private logWithClass(message: string, className: string): void {
         if (this.consoleOutput) {
             const logEntry = document.createElement("pre");
             logEntry.className = className;
