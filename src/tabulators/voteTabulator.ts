@@ -1,8 +1,8 @@
-import { Race, RaceResults } from "../race";
-import Vote from "../vote";
+import { Race, RaceReturns } from "../race.js";
+import Vote from "../vote.js";
 
 interface VoteTabulator {
-    tabulateVotes(race: Race, votes: Vote[]): RaceResults;
+    tabulateVotes(race: Race, votes: Vote[]): RaceReturns;
 }
 
 export default VoteTabulator;

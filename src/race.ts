@@ -12,8 +12,28 @@ class Race {
     }
 }
 
-class RaceResults {
+class RaceReturns {
+    readonly elected: CandidateReturn[];
+    readonly eliminated: CandidateReturn[];
+    readonly all: CandidateReturn[];
 
+    constructor(all: CandidateReturn[]) {
+        this.all = all;
+        this.elected = all.filter(c => c.isElected);
+        this.eliminated = all.filter(c => !c.isElected);
+    }
 }
 
-export { Race, RaceResults };
+class CandidateReturn {
+    readonly candidate: Candidate;
+    readonly votes: number;
+    readonly isElected: boolean;
+
+    constructor(candidate: Candidate, votes: number, isElected: boolean = false) {
+        this.candidate = candidate;
+        this.votes = votes;
+        this.isElected = isElected;
+    }
+}
+
+export { Race, RaceReturns, CandidateReturn };

@@ -33,6 +33,14 @@ class HTMLLogger {
         this.logWithClass(message, "text-info");
     }
 
+    static blank(): void {
+        if (this.consoleOutput) {
+            const blankEntry = document.createElement("pre");
+            blankEntry.textContent = " ";
+            this.consoleOutput.appendChild(blankEntry);
+        }
+    }
+
     private static logWithClass(message: string, className: string): void {
         if (this.consoleOutput) {
             const logEntry = document.createElement("pre");
