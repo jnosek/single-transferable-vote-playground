@@ -23,8 +23,8 @@
       </li>
     </ul>
     <div class="tab-content mt-3" id="voteTabsContent">
+      <!-- RACE TAB -->
       <div class="tab-pane fade show active" id="race" role="tabpanel" aria-labelledby="race-tab">
-        <!-- Race tab content goes here -->
         <form class="container">
           <h3>Race</h3>
           <div class="row mb-3">
@@ -69,18 +69,19 @@
           </div>
           <div class="row">
             <div class="col">
-            <ul class="list-group" id="candidates-list">
-              <!-- Candidate and party names will be added here -->
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                  <p class="mb-1 fw-bold">Candidate Name</p>
-                  <small class="text-muted">Party Name</small>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm ms-3" id="remove-candidate" title="Remove">
-                  <i class="bi bi-x"></i>
-                </button>
-              </li>
-            </ul>
+              <ul class="list-group" id="candidates-list">
+              </ul>
+              <template id="candidate-template">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <p class="mb-1 fw-bold">Candidate Name</p>
+                    <small class="text-muted">Party Name</small>
+                  </div>
+                  <button type="button" class="btn btn-danger btn-sm ms-3" title="Remove">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </li>
+              </template>
             </div>
             <div class="col">
 

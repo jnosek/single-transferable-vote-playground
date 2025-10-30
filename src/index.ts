@@ -4,10 +4,17 @@ import { Race } from "./race.js";
 import Candidate from "./candidate.js";
 import { SimpleVoteGenerator } from "./voteGenerator.js";
 import PluralityTabulator from "./tabulators/pluralityTabulator.js";
+import RaceViewModel from "./components/raceViewModel.js";
 
 document.addEventListener('DOMContentLoaded', loaded);
 
 function loaded(): void {
+
+  // ui start
+  const raceViewModel = new RaceViewModel();
+  raceViewModel.bind();
+
+  // demo
   output.initialize('console-output');
 
   output.info('Application has started.');
