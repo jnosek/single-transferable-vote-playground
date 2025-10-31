@@ -19,6 +19,9 @@
         <button class="nav-link" id="plurality-tab" data-bs-toggle="tab" data-bs-target="#plurality" type="button" role="tab" aria-controls="plurality" aria-selected="false">Plurality Vote</button>
       </li>
       <li class="nav-item" role="presentation">
+        <button class="nav-link" id="majority-tab" data-bs-toggle="tab" data-bs-target="#majority" type="button" role="tab" aria-controls="majority" aria-selected="false">Majority Vote</button>
+      </li>
+      <li class="nav-item" role="presentation">
         <button class="nav-link" id="stv-tab" data-bs-toggle="tab" data-bs-target="#stv" type="button" role="tab" aria-controls="stv" aria-selected="false">Single Transferable Vote</button>
       </li>
     </ul>
@@ -97,22 +100,53 @@
                 </div>
               </div>
             </div>
-            <div class="col-2">
-              <h3>Simulator</h3>
-              <div class="mb-3">
-                <button type="button" class="btn btn-success mb-3" id="plurality-run"><i class="bi bi-play"></i> Run</button>
+            <div class="col-8">
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="btn btn-success" id="plurality-run"><i class="bi bi-play"></i> Run Simulation</button>
+                </div>
+                <div class="col">
+                  <h3 class="text-end">Output</h3>
+                </div>
               </div>
-            </div>
-            <div class="col-6">
-              <h3>Output</h3>
               <div id="plurality-output" class="html-logger border rounded p-3">
               </div>
             </div>
           </div>
          </div>
       </div>
+
+      <!-- MAJORITY TAB -->
+      <div class="tab-pane fade" id="majority" role="tabpanel" aria-labelledby="majority-tab">
+         <div class="container">
+          <div class="row">
+            <div class="col-4">
+              <h3>Options</h3>
+              <div class="mb-3 row align-items-center">
+                <label for="majority-voterCount" class="col-sm-6 col-form-label">Number of Voters</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="majority-voterCount" name="majority-voterCount" min="1" value="100">
+                </div>
+              </div>
+            </div>
+            <div class="col-8">
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="btn btn-success" id="majority-run"><i class="bi bi-play"></i> Run Simulation</button>
+                </div>
+                <div class="col">
+                  <h3 class="text-end">Output</h3>
+                </div>
+              </div>
+              <div id="majority-output" class="html-logger border rounded p-3">
+              </div>
+            </div>
+          </div>
+         </div>
+      </div>
+
+      <!-- STV TAB -->
       <div class="tab-pane fade" id="stv" role="tabpanel" aria-labelledby="stv-tab">
-        <!-- STV tab content goes here -->
       </div>
     </div>
     <!-- Bootstrap Tabs End -->
