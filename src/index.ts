@@ -1,6 +1,6 @@
 // Entry point for your TypeScript app
 import HtmlLogger from "./components/htmlLogger.js";
-import { SimpleVoteGenerator } from "./voteGenerator.js";
+import { RandomVoteGenerator, WeightedRandomVoteGenerator } from "./voteGenerator.js";
 import PluralityTabulator from "./tabulators/pluralityTabulator.js";
 import RaceViewModel from "./components/raceViewModel.js";
 
@@ -24,14 +24,17 @@ function loaded(): void {
     output.log(`Election for race ${race.name}`);
     
     for (let candidate of race.candidates) {
-      output.secondary(`     ${candidate.name} (${candidate.party})`);
+      output.secondary(`${candidate.name} (${candidate.party})`);
     }
 
     output.blank();
 
     // configure votes
     const voteCountInput = document.getElementById('plurality-voterCount') as HTMLInputElement;
-    const voteGenerator = new SimpleVoteGenerator(parseInt(voteCountInput.value));
+    const voteGenerator = new WeightedRandomVoteGenerator(
+      parseInt(voteCountInput.value), 
+      [0.35, 0.3, 0.2, 0.15]
+    );
 
     // tabulate votes
     const tabulator = new PluralityTabulator();
