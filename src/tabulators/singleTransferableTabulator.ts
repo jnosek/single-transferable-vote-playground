@@ -1,11 +1,11 @@
-import { Race, RaceResults } from "../race";
-import Vote from "../vote";
-import VoteTabulator from "./voteTabulator";
+import { Race, RaceReturn } from "../race.js";
+import VoteGenerator from "../voteGenerator.js";
+import VoteTabulator from "./voteTabulator.js";
 
-class singleTransferableTabulator implements VoteTabulator {
-    tabulateVotes(race: Race, votes: Vote[]): RaceResults {
+class SingleTransferableTabulator implements VoteTabulator {
+    tabulateVotes(race: Race, votes: VoteGenerator): RaceReturn[] {
         // Implementation for tabulating votes in a single transferable vote election
         // TODO: Implement the logic and return RaceResults
-        return new RaceResults();
+        return [new RaceReturn([])];
     }
 }

@@ -3,7 +3,7 @@ import { Race } from "./race.js";
 import Vote, { BlockVote } from "./vote.js"; // Add this import if Vote is a default export
 
 abstract class VoteGenerator {
-    protected numberOfVoters: number;
+    readonly numberOfVoters: number;
 
     constructor(numberOfVoters: number) {
         this.numberOfVoters = numberOfVoters;
@@ -87,13 +87,9 @@ class WeightedRandomVoteGenerator extends VoteGenerator {
     castVotes(race: Race): Vote[] {
         const votes: Vote[] = [];
         
-        // create map of candidates to weights
-        const candidateWeights: Map<Candidate, number> = new Map(
-            race.candidates.map((candidate, index) => [candidate, this.weights[index] || 0])
-        );
-        
         // order candidates randomly based on weights
         // this gives the chance that the lower weights will win the election
+        // for more varied results
         const orderedCandidates = WeightedRandomVoteGenerator.weightedShuffle(
             [...race.candidates], this.weights);
 

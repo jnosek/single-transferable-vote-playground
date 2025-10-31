@@ -31,7 +31,7 @@ class Race {
     }
 }
 
-class RaceReturns {
+class RaceReturn {
     readonly elected: CandidateReturn[];
     readonly eliminated: CandidateReturn[];
     readonly all: CandidateReturn[];
@@ -55,4 +55,4 @@ class CandidateReturn {
     }
 }
 
-export { Race, RaceReturns, CandidateReturn };
+export { Race, RaceReturn, CandidateReturn };
