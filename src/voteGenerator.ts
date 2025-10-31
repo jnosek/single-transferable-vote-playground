@@ -2,8 +2,14 @@ import Candidate from "./candidate.js";
 import { Race } from "./race.js";
 import Vote, { BlockVote } from "./vote.js"; // Add this import if Vote is a default export
 
-interface VoteGenerator {
-    castVotes(numberOfVoters: number, race: Race): Vote[];
+abstract class VoteGenerator {
+    protected numberOfVoters: number;
+
+    constructor(numberOfVoters: number) {
+        this.numberOfVoters = numberOfVoters;
+    }
+
+    abstract castVotes(race: Race): Vote[];
 }
 
 /**
@@ -11,11 +17,11 @@ interface VoteGenerator {
  * 
  * Every voter will randomly select a candidate for each available seat in the race. 
  */
-class SimpleVoteGenerator implements VoteGenerator {
+class SimpleVoteGenerator extends VoteGenerator {
 
-    castVotes(numberOfVoters: number, race: Race): Vote[] {
+    castVotes(race: Race): Vote[] {
         const votes: Vote[] = [];
-        for (let i = 0; i < numberOfVoters; i++) {
+        for (let i = 0; i < this.numberOfVoters; i++) {
             const selectedCandidates: Candidate[] = [];
 
             // Create a shallow copy and shuffle it
