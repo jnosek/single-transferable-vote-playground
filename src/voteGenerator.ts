@@ -91,7 +91,9 @@ class WeightedRandomVoteGenerator extends VoteGenerator {
         // this gives the chance that the lower weights will win the election
         // for more varied results
         const orderedCandidates = WeightedRandomVoteGenerator.weightedShuffle(
-            [...race.candidates], this.weights);
+            [...race.candidates], 
+            // only take as many weights as there are candidates
+            this.weights.slice(0, race.candidates.length));
 
         // create new vote weights to distribute votes to the predetermined winners
         const voteWeights: number[] = [];

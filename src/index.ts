@@ -86,6 +86,9 @@ function loaded(): void {
         output.primary("General Election Results:");
       else
         output.primary(`Runoff Election Results:`);
+
+      output.blank();
+      output.info(`Number of votes cast: ${result.all.reduce((sum, cr) => sum + cr.votes, 0)}`);
       
       for (const candidateReturn of result.all) {
         if(candidateReturn.isElected) {

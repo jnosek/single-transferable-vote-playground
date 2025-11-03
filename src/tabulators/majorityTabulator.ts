@@ -59,6 +59,8 @@ class MajorityTabulator implements VoteTabulator {
             sortedVoteCounts = sortedVoteCounts.filter(([_, count]) => count >= quota)
 
         // find candidates meeting the quota, and fill the seats
+        // TODO: there is a bug here where if there is a tie for a seat greater than the available seats, it will only pick the first candidate
+        // and not force a runoff between the tied candidates
         const electedCandidates = sortedVoteCounts
             .map(([candidate, _]) => candidate)
             .slice(0, race.seats);
