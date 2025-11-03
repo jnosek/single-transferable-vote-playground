@@ -15,14 +15,16 @@ class MajorityTabulator implements VoteTabulator {
                 .slice(0, remainingSeats + 1)
                 .map(c => c.candidate);
 
-            const runOffResults = this.tabulateVotes(
+            // TODO: the run off election is not generating the property number of votes
+            const runOffResults = this.tabulateRound(
                 new Race(`${race.name} Runoff`, runOffCandidates, remainingSeats),
-                votes
+                votes,
+                true
             );
 
             // TODO: check for a tie and resolve it appropriately (coin flip?)
 
-            return [ electionResults, ...runOffResults ];
+            return [ electionResults, runOffResults ];
         }
         else 
         {
