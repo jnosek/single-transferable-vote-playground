@@ -35,26 +35,7 @@ class MajorityTabulator implements VoteTabulator {
         // if we still don't have enough elected candidates, take subsequent 
         // candidates from the runoff results, and flip a coin for ties
         if(runOffResults.elected.length < remainingSeats) {
-            const electedCandidates: Candidate[] = runOffResults.elected.map(c => c.candidate);
-            
-            sortedVoteCounts = MajorityTabulator.sortVotesByCount(runOffResults.eliminated);
-            
-            for(const [_, candidates] of sortedVoteCounts) {
-                // we have enough elected candidates, so stop
-                if(electedCandidates.length >= remainingSeats) {
-                    break;
-                }
-                // we have enough elected candidates to fill the remaining seats
-                else if(candidates.length <= remainingSeats - electedCandidates.length) {
-                    electedCandidates.push(...candidates);
-                } 
-                // we have more candidates than remaining seats, need to break ties
-                else {
-                    // shuffle candidates to randomize selection
-                    const shuffled = RandomHelper.shuffle(candidates);
-                    electedCandidates.push(...shuffled.slice(0, remainingSeats - electedCandidates.length));
-                }
-            } 
+            const electedCandidates = MajorityTabulator.selectRunOffCandidates(remainingSeats, runOffResults);
 
             // return new runoff results with updated elected candidates
             return [ electionResults, new RaceReturn(
@@ -95,9 +76,8 @@ class MajorityTabulator implements VoteTabulator {
             }
         }
 
-        // Sort candidates by vote count in descending order
-        // then group them by count
-        // and filter to only those who met the quota
+        // Sort candidates by vote count and 
+        // filter to only those who met the quota
         const sortedVoteCounts = new Map(
             Array.from(MajorityTabulator.sortVotesByCount(voteCounts))
             .filter(([count, _]) => count >= quota)
@@ -173,6 +153,31 @@ class MajorityTabulator implements VoteTabulator {
             // there are enough seats for all candidates with this count, elect them all
             electedCandidates.push(...candidates);
         }
+
+        return electedCandidates;
+    }
+
+    private static selectRunOffCandidates(availableSeats: number, runOffResults: RaceReturn) : Candidate[] {
+        const electedCandidates: Candidate[] = runOffResults.elected.map(c => c.candidate);
+            
+        const sortedVoteCounts = MajorityTabulator.sortVotesByCount(runOffResults.eliminated);
+            
+        for(const [_, candidates] of sortedVoteCounts) {
+            // we have enough elected candidates, so stop
+            if(electedCandidates.length >= availableSeats) {
+                break;
+            }
+            // we have enough elected candidates to fill the remaining seats
+            else if(candidates.length <= availableSeats - electedCandidates.length) {
+                electedCandidates.push(...candidates);
+            } 
+            // we have more candidates than remaining seats, need to break ties
+            else {
+                // shuffle candidates to randomize selection
+                const shuffled = RandomHelper.shuffle(candidates);
+                electedCandidates.push(...shuffled.slice(0, availableSeats - electedCandidates.length));
+            }
+        } 
 
         return electedCandidates;
     }

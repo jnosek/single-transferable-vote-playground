@@ -27,6 +27,8 @@ class PluralityTabulator implements VoteTabulator {
             .map(([candidate, _]) => candidate)
             .slice(0, race.seats);
 
+        // TODO: need to settle ties with a coin flip
+
         // generate RaceReturns
         return [
             new RaceReturn(race.candidates.map(candidate =>
