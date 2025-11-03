@@ -1,5 +1,5 @@
-import Candidate from "./candidate.js";
 import { Race } from "./race.js";
+import RandomHelper from "./randomHelper.js";
 import Vote, { BlockVote } from "./vote.js"; // Add this import if Vote is a default export
 
 abstract class VoteGenerator {
@@ -10,42 +10,6 @@ abstract class VoteGenerator {
     }
 
     abstract castVotes(race: Race): Vote[];
-
-    // Fisher-Yates shuffle
-    protected static shuffle<T>(array: T[]): T[] {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    /**
-     * Shuffles an array based on weights using a weighted random order.
-     * @param array The array to shuffle.
-     * @param weights The weights corresponding to each element.
-     * @returns A new array shuffled according to weights.
-     */
-    protected static weightedShuffle<T>(array: T[], weights: number[]): T[] {
-        const result: T[] = [];
-        const items = array.slice();
-        const itemWeights = weights.slice();
-
-        while (items.length > 0) {
-            const totalWeight = itemWeights.reduce((a, b) => a + b, 0);
-            let rand = Math.random() * totalWeight;
-            let idx = 0;
-            while (rand >= itemWeights[idx]) {
-                rand -= itemWeights[idx];
-                idx++;
-            }
-            result.push(items[idx]);
-            items.splice(idx, 1);
-            itemWeights.splice(idx, 1);
-        }
-
-        return result;
-    }
 }
 
 /**
@@ -62,7 +26,7 @@ class RandomVoteGenerator extends VoteGenerator {
         for (let i = 0; i < this.numberOfVoters; i++) {
 
             // Create a shallow copy and shuffle it
-            const shuffled = RandomVoteGenerator.shuffle([...race.candidates]);
+            const shuffled = RandomHelper.shuffle([...race.candidates]);
             votes.push(new BlockVote(shuffled.slice(0, race.seats)));
         }
 
@@ -90,7 +54,7 @@ class WeightedRandomVoteGenerator extends VoteGenerator {
         // order candidates randomly based on weights
         // this gives the chance that the lower weights will win the election
         // for more varied results
-        const orderedCandidates = WeightedRandomVoteGenerator.weightedShuffle(
+        const orderedCandidates = RandomHelper.weightedShuffle(
             [...race.candidates], 
             // only take as many weights as there are candidates
             this.weights.slice(0, race.candidates.length));
@@ -107,7 +71,7 @@ class WeightedRandomVoteGenerator extends VoteGenerator {
         // generate votes using the new vote weights
         for (let i = 0; i < this.numberOfVoters; i++) {
             // Create a shallow copy and shuffle it
-            const shuffled = WeightedRandomVoteGenerator.weightedShuffle([...orderedCandidates], voteWeights);
+            const shuffled = RandomHelper.weightedShuffle([...orderedCandidates], voteWeights);
             votes.push(new BlockVote(shuffled.slice(0, race.seats)));
         }
 
