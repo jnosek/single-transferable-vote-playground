@@ -2,7 +2,7 @@ import Candidate from "../candidate.js";
 import { CandidateReturn, Race, RaceReturn } from "../race.js";
 import RandomHelper from "../randomHelper.js";
 import VoteGenerator from "../voteGenerator.js";
-import VoteTabulator from "./voteTabulator.js";
+import VoteTabulator, { Tabulator } from "./voteTabulator.js";
 
 class MajorityTabulator implements VoteTabulator {
     /**
@@ -25,8 +25,8 @@ class MajorityTabulator implements VoteTabulator {
         // else, do runoff election for remaining seats
         const remainingSeats = race.seats - electionResults.elected.length;
 
-        let sortedVoteCounts = MajorityTabulator.sortVotesByCount(electionResults.eliminated);
-        const runOffCandidates = MajorityTabulator.selectCandidates(remainingSeats + 1, sortedVoteCounts, false);
+        let sortedVoteCounts = Tabulator.sortVotesByCount(electionResults.eliminated);
+        const runOffCandidates = Tabulator.selectCandidates(remainingSeats + 1, sortedVoteCounts);
         const runOffResults = this.tabulateRound(
             new Race(`${race.name} Runoff`, runOffCandidates, remainingSeats),
             votes
@@ -79,12 +79,12 @@ class MajorityTabulator implements VoteTabulator {
         // Sort candidates by vote count and 
         // filter to only those who met the quota
         const sortedVoteCounts = new Map(
-            Array.from(MajorityTabulator.sortVotesByCount(voteCounts))
+            Array.from(Tabulator.sortVotesByCount(voteCounts))
             .filter(([count, _]) => count >= quota)
         );
 
         // find candidates meeting the quota, and fill the seats
-        const electedCandidates: Candidate[] = MajorityTabulator.selectCandidates(race.seats, sortedVoteCounts);
+        const electedCandidates: Candidate[] = Tabulator.selectCandidatesStrict(race.seats, sortedVoteCounts);
 
         // generate RaceReturn
         return new RaceReturn(Array
@@ -97,70 +97,13 @@ class MajorityTabulator implements VoteTabulator {
                 )
         ));
     }
-
-    /**
-     * Sorts candidates by their vote counts in descending order,
-     * then groups them by vote count.
-     */
-    private static sortVotesByCount(candidates: Map<Candidate, number> | CandidateReturn[]): Map<number, Candidate[]> {
-        let sortedVoteCounts: Map<number, Candidate[]> = new Map();
-
-        let votes: [Candidate, number][] = [];
-        if(candidates instanceof Map) {
-            votes = Array.from(candidates.entries());
-        } else if(candidates instanceof Array) {
-            votes = candidates.map(candidateReturn => [candidateReturn.candidate, candidateReturn.votes]);
-        }
-        else {
-            throw new Error("Invalid candidates type");
-        }
-
-        // Sort candidates by vote count in descending order
-        // then group them by count
-        votes
-            .sort((a, b) => b[1] - a[1])
-            .forEach(([candidate, count]) => {
-                if (!sortedVoteCounts.has(count))
-                    sortedVoteCounts.set(count, [candidate]);
-                else
-                    sortedVoteCounts.get(count)!.push(candidate);
-            });
-
-        return sortedVoteCounts;
-    }
-
-    /**
-     * Select candidates based on available seats and sorted vote counts
-     * @param availableSeats 
-     * @param sortedVoteCounts 
-     * @param exclusive 
-     * @returns 
-     */
-    private static selectCandidates(availableSeats: number, sortedVoteCounts: Map<number, Candidate[]>, exclusive: boolean = true) : Candidate[] {
-        const electedCandidates: Candidate[] = [];
-
-        for(const [_, candidates] of sortedVoteCounts) {
-            if(
-                // we have enough elected candidates,
-                electedCandidates.length >= availableSeats ||
-                // or if this is an exclusive select and there are more 
-                // elected candidates than seats, we have ties that need to be resolved
-                (exclusive && availableSeats - electedCandidates.length < candidates.length)) {
-                // then stop
-                    break;
-            } 
-
-            // there are enough seats for all candidates with this count, elect them all
-            electedCandidates.push(...candidates);
-        }
-
-        return electedCandidates;
-    }
+    
+    
 
     private static selectRunOffCandidates(availableSeats: number, runOffResults: RaceReturn) : Candidate[] {
         const electedCandidates: Candidate[] = runOffResults.elected.map(c => c.candidate);
             
-        const sortedVoteCounts = MajorityTabulator.sortVotesByCount(runOffResults.eliminated);
+        const sortedVoteCounts = Tabulator.sortVotesByCount(runOffResults.eliminated);
             
         for(const [_, candidates] of sortedVoteCounts) {
             // we have enough elected candidates, so stop

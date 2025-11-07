@@ -1,7 +1,8 @@
 import Candidate from "../candidate.js";
 import { CandidateReturn, Race, RaceReturn } from "../race.js";
+import RandomHelper from "../randomHelper.js";
 import VoteGenerator from "../voteGenerator.js";
-import VoteTabulator from "./voteTabulator.js";
+import VoteTabulator, { Tabulator } from "./voteTabulator.js";
 
 /**
 * A tabulator that implements the plurality voting system.
@@ -22,12 +23,26 @@ class PluralityTabulator implements VoteTabulator {
         }
 
         // Sort candidates by vote count in descending order
-        const electedCandidates = Array.from(voteCounts.entries())
-            .sort((a, b) => b[1] - a[1])
-            .map(([candidate, _]) => candidate)
-            .slice(0, race.seats);
+        const sortedVoteCounts = Tabulator.sortVotesByCount(voteCounts);
+        const electedCandidates: Candidate[] = [];
 
-        // TODO: need to settle ties with a coin flip
+        // select candidates and break any ties randomly
+        for(const [_, candidates] of sortedVoteCounts) {
+            // we have enough elected candidates, so stop
+            if(electedCandidates.length >= race.seats) {
+                break;
+            }
+            // we have enough elected candidates to fill the remaining seats
+            else if(candidates.length <= race.seats - electedCandidates.length) {
+                electedCandidates.push(...candidates);
+            } 
+            // we have more candidates than remaining seats, need to break ties
+            else {
+                // shuffle candidates to randomize selection
+                const shuffled = RandomHelper.shuffle(candidates);
+                electedCandidates.push(...shuffled.slice(0, race.seats - electedCandidates.length));
+            }
+        } 
 
         // generate RaceReturns
         return [
